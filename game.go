@@ -40,7 +40,7 @@ type xcell struct {
 	i, j int
 }
 
-var xdead = xcell{-1, -1}
+var xnil = xcell{-1, -1}
 
 type xset map[xcell]struct{}
 
@@ -53,12 +53,12 @@ func (h xset) pop() xcell {
 		delete(h, x)
 		return x
 	}
-	return xdead
+	return xnil
 }
 
 func (g *Game) unfold(i, j int) {
 	x := xcell{i, j}
-	for ; x != xdead; x = g.xwalk.pop() {
+	for ; x != xnil; x = g.xwalk.pop() {
 		c := &g.m[x.i][x.j]
 		if c.Unfolded() || c.Flagged() {
 			continue
