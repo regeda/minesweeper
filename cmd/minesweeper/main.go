@@ -13,23 +13,24 @@ func main() {
 	var rows, cols int
 	fmt.Print("Enter [rows cols]: ")
 	if _, err := fmt.Fscan(os.Stdin, &rows, &cols); err != nil {
-		panic(err.Error())
+		fmt.Println("failed to read rows & cols:", err)
+		return
 	}
 	rand.Seed(time.Now().UnixNano())
 	m := minesweeper.GenerateMatrix(rows, cols, 0.3)
 	g := minesweeper.New(m)
 	printMatrix(m)
 	var (
-		ch   string
+		cmd  string
 		i, j int
 	)
 	for {
 		fmt.Print("Go [F|f|U x y]: ")
-		if _, err := fmt.Fscan(os.Stdin, &ch, &i, &j); err != nil {
-			panic(err.Error())
+		if _, err := fmt.Fscan(os.Stdin, &cmd, &i, &j); err != nil {
+			fmt.Println("failed to read an action:", err)
+			continue
 		}
-		fmt.Println(ch, i, j)
-		switch ch {
+		switch cmd {
 		case "F":
 			m[i][j].Flag(true)
 			printMatrix(m)
@@ -47,8 +48,9 @@ func main() {
 				fmt.Println("WIN")
 				return
 			}
-			fmt.Println("left cells: ", left)
-
+			fmt.Println("left cells:", left)
+		default:
+			fmt.Println("Unknown command:", cmd)
 		}
 	}
 }

@@ -27,3 +27,8 @@ for {
 	}
 }
 ```
+
+Or play in command line:
+```
+go run cmd/minesweeper/main.go
+```
