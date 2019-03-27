@@ -39,7 +39,7 @@ func (m Matrix) Stat() CellsStat {
 	var s CellsStat
 	for _, r := range m {
 		for _, c := range r {
-			if c.isBomb() {
+			if c.IsBomb() {
 				s.Bombs++
 			} else {
 				s.Free++

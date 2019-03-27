@@ -28,7 +28,7 @@ func (g *Game) cellsLeft() int {
 // Returns amount of remained cells.
 // The game passed if no cells left.
 func (g *Game) Unfold(i, j int) (int, bool) {
-	if g.m[i][j].isBomb() {
+	if g.m[i][j].IsBomb() {
 		g.m[i][j].unfold()
 		return 0, false
 	}
@@ -79,7 +79,7 @@ func (g *Game) unfold(i, j int) {
 }
 
 func (g *Game) hasBomb(i, j int) byte {
-	if g.m[i][j].isBomb() {
+	if g.m[i][j].IsBomb() {
 		return 1
 	}
 	g.xbuf = append(g.xbuf, xcell{i, j})

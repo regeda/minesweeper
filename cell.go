@@ -10,7 +10,7 @@ const (
 // Cell contrains cell's state.
 type Cell byte
 
-func (c Cell) isBomb() bool {
+func (c Cell) IsBomb() bool {
 	return c.Bombs() == byte(Bomb)
 }
 

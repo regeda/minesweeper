@@ -57,7 +57,11 @@ func printMatrix(m minesweeper.Matrix) {
 	for _, r := range m {
 		for _, c := range r {
 			if c.Unfolded() {
-				fmt.Print(c.Bombs())
+				if c.IsBomb() {
+					fmt.Print("x")
+				} else {
+					fmt.Print(c.Bombs())
+				}
 			} else if c.Flagged() {
 				fmt.Print("F")
 			} else {
