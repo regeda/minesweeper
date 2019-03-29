@@ -25,8 +25,8 @@ func main() {
 		i, j int
 	)
 	for {
-		fmt.Print("Go [F|f|U x y]: ")
-		if _, err := fmt.Fscan(os.Stdin, &cmd, &i, &j); err != nil {
+		fmt.Print("Go [x y [F-flag|f-unflag|U-unfold]]: ")
+		if _, err := fmt.Fscan(os.Stdin, &i, &j, &cmd); err != nil {
 			fmt.Println("failed to read an action:", err)
 			continue
 		}

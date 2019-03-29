@@ -24,7 +24,7 @@ func GenerateMatrix(rows, cols int, diffc float64) Matrix {
 	m := newMatrix(rows, cols)
 	var offset int
 	for bombs > 0 {
-		offset += rand.Intn(cells - offset - bombs + 1)
+		offset += rand.Intn(rand.Intn(cells-offset-bombs) + 1)
 		i := offset / cols
 		j := offset % cols
 		m[i][j] = Bomb

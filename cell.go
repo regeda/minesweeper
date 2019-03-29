@@ -3,11 +3,11 @@ package minesweeper
 // Cell constants
 const (
 	Bomb     = Cell(9)
-	Unfolded = Cell(1 << 6)
-	Flagged  = Cell(1 << 7)
+	Unfolded = Cell(1 << 4)
+	Flagged  = Cell(1 << 5)
 )
 
-// Cell contrains cell's state.
+// Cell contains cell's state.
 type Cell byte
 
 func (c Cell) IsBomb() bool {
