@@ -60,7 +60,7 @@ func (g *Game) unfold(i, j int) {
 	x := xcell{i, j}
 	for ; x != xnil; x = g.xwalk.pop() {
 		c := &g.m[x.i][x.j]
-		if c.Unfolded() || c.Flagged() {
+		if c.any(Unfolded | Flagged) {
 			continue
 		}
 		c.unfold()

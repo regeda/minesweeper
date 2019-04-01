@@ -10,8 +10,9 @@ const (
 // Cell contains cell's state.
 type Cell byte
 
+// IsBomb checks does a cell contain a bomb
 func (c Cell) IsBomb() bool {
-	return c.Bombs() == byte(Bomb)
+	return c.same(Bomb)
 }
 
 // Bombs returns bombs suggestions.
@@ -21,10 +22,14 @@ func (c Cell) Bombs() byte {
 
 // Unfolded checks that a cell is open.
 func (c Cell) Unfolded() bool {
-	return c.is(Unfolded)
+	return c.same(Unfolded)
 }
 
-func (c Cell) is(t Cell) bool {
+func (c Cell) any(t Cell) bool {
+	return c&t > 0
+}
+
+func (c Cell) same(t Cell) bool {
 	return c&t == t
 }
 
@@ -39,7 +44,7 @@ func (c *Cell) suggest(bombs byte) {
 
 // Flagged checks that a cell has a flag.
 func (c Cell) Flagged() bool {
-	return c.is(Flagged)
+	return c.same(Flagged)
 }
 
 // Flag sets or unsets a flag on the cell.

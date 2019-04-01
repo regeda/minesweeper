@@ -157,6 +157,7 @@ func TestGame_Unfold(t *testing.T) {
 
 		// set flag
 		mtest[0][1].Flag(true)
+		assert.True(t, mtest[0][1].Flagged())
 		assertEqualMatrix(t, minesweeper.Matrix{
 			{0, minesweeper.Flagged, minesweeper.Bomb},
 		}, mtest)
@@ -185,6 +186,7 @@ func TestGame_Unfold(t *testing.T) {
 
 		// unset flag
 		mtest[0][1].Flag(false)
+		assert.False(t, mtest[0][1].Flagged())
 		assertEqualMatrix(t, minesweeper.Matrix{
 			{minesweeper.Unfolded, 0, minesweeper.Bomb},
 		}, mtest)
@@ -193,6 +195,7 @@ func TestGame_Unfold(t *testing.T) {
 		left, ok = g.Unfold(0, 1)
 		assert.True(t, ok)
 		assert.Equal(t, 0, left)
+		assert.Equal(t, byte(1), mtest[0][1].Bombs())
 		assertEqualMatrix(t, minesweeper.Matrix{
 			{minesweeper.Unfolded, 1 + minesweeper.Unfolded, minesweeper.Bomb},
 		}, mtest)
