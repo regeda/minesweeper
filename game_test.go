@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func assertEqualMatrix(t *testing.T, expected, actual minesweeper.Matrix) {
+func assertEqualMatrix(t *testing.T, expected, actual minesweeper.Grid) {
 	for i, r := range expected {
 		for j, c := range r {
 			if c != actual[i][j] {
@@ -20,7 +20,7 @@ func assertEqualMatrix(t *testing.T, expected, actual minesweeper.Matrix) {
 
 func TestGame_Unfold(t *testing.T) {
 	t.Run("game over if bomb pressed", func(t *testing.T) {
-		m := minesweeper.Matrix{
+		m := minesweeper.Grid{
 			{0, minesweeper.Bomb, 0},
 		}
 
@@ -29,7 +29,7 @@ func TestGame_Unfold(t *testing.T) {
 		_, ok := g.Unfold(0, 1)
 
 		assert.False(t, ok)
-		assertEqualMatrix(t, minesweeper.Matrix{
+		assertEqualMatrix(t, minesweeper.Grid{
 			{0, minesweeper.Bomb + minesweeper.Unfolded, 0},
 		}, m)
 	})
@@ -37,17 +37,17 @@ func TestGame_Unfold(t *testing.T) {
 	t.Run("unfold empty cells", func(t *testing.T) {
 		cases := []struct {
 			name        string
-			mtest, mexp minesweeper.Matrix
+			mtest, mexp minesweeper.Grid
 			i, j        int
 			left        int
 		}{
 			{
 				name: "suggest number up-left",
-				mtest: minesweeper.Matrix{
+				mtest: minesweeper.Grid{
 					{0, minesweeper.Bomb},
 					{minesweeper.Bomb, minesweeper.Bomb},
 				},
-				mexp: minesweeper.Matrix{
+				mexp: minesweeper.Grid{
 					{3 + minesweeper.Unfolded, minesweeper.Bomb},
 					{minesweeper.Bomb, minesweeper.Bomb},
 				},
@@ -56,11 +56,11 @@ func TestGame_Unfold(t *testing.T) {
 			},
 			{
 				name: "suggest number up-right",
-				mtest: minesweeper.Matrix{
+				mtest: minesweeper.Grid{
 					{minesweeper.Bomb, 0},
 					{minesweeper.Bomb, minesweeper.Bomb},
 				},
-				mexp: minesweeper.Matrix{
+				mexp: minesweeper.Grid{
 					{minesweeper.Bomb, 3 + minesweeper.Unfolded},
 					{minesweeper.Bomb, minesweeper.Bomb},
 				},
@@ -69,11 +69,11 @@ func TestGame_Unfold(t *testing.T) {
 			},
 			{
 				name: "suggest number down-left",
-				mtest: minesweeper.Matrix{
+				mtest: minesweeper.Grid{
 					{minesweeper.Bomb, minesweeper.Bomb},
 					{0, minesweeper.Bomb},
 				},
-				mexp: minesweeper.Matrix{
+				mexp: minesweeper.Grid{
 					{minesweeper.Bomb, minesweeper.Bomb},
 					{3 + minesweeper.Unfolded, minesweeper.Bomb},
 				},
@@ -82,11 +82,11 @@ func TestGame_Unfold(t *testing.T) {
 			},
 			{
 				name: "suggest number down-right",
-				mtest: minesweeper.Matrix{
+				mtest: minesweeper.Grid{
 					{minesweeper.Bomb, minesweeper.Bomb},
 					{minesweeper.Bomb, 0},
 				},
-				mexp: minesweeper.Matrix{
+				mexp: minesweeper.Grid{
 					{minesweeper.Bomb, minesweeper.Bomb},
 					{minesweeper.Bomb, 3 + minesweeper.Unfolded},
 				},
@@ -95,12 +95,12 @@ func TestGame_Unfold(t *testing.T) {
 			},
 			{
 				name: "unfold empty cells",
-				mtest: minesweeper.Matrix{
+				mtest: minesweeper.Grid{
 					{0, 0, minesweeper.Bomb},
 					{0, 0, minesweeper.Bomb},
 					{minesweeper.Bomb, minesweeper.Bomb, minesweeper.Bomb},
 				},
-				mexp: minesweeper.Matrix{
+				mexp: minesweeper.Grid{
 					{minesweeper.Unfolded, 2 + minesweeper.Unfolded, minesweeper.Bomb},
 					{2 + minesweeper.Unfolded, 5 + minesweeper.Unfolded, minesweeper.Bomb},
 					{minesweeper.Bomb, minesweeper.Bomb, minesweeper.Bomb},
@@ -110,12 +110,12 @@ func TestGame_Unfold(t *testing.T) {
 			},
 			{
 				name: "unfold closest empty cells",
-				mtest: minesweeper.Matrix{
+				mtest: minesweeper.Grid{
 					{0, 0, minesweeper.Bomb},
 					{0, 0, minesweeper.Bomb},
 					{0, 0, minesweeper.Bomb},
 				},
-				mexp: minesweeper.Matrix{
+				mexp: minesweeper.Grid{
 					{minesweeper.Unfolded, 2 + minesweeper.Unfolded, minesweeper.Bomb},
 					{minesweeper.Unfolded, 3 + minesweeper.Unfolded, minesweeper.Bomb},
 					{minesweeper.Unfolded, 2 + minesweeper.Unfolded, minesweeper.Bomb},
@@ -125,10 +125,10 @@ func TestGame_Unfold(t *testing.T) {
 			},
 			{
 				name: "suggest number and continue game",
-				mtest: minesweeper.Matrix{
+				mtest: minesweeper.Grid{
 					{0, 0, minesweeper.Bomb},
 				},
-				mexp: minesweeper.Matrix{
+				mexp: minesweeper.Grid{
 					{0, 1 + minesweeper.Unfolded, minesweeper.Bomb},
 				},
 				i: 0, j: 1,
@@ -149,7 +149,7 @@ func TestGame_Unfold(t *testing.T) {
 	})
 
 	t.Run("flagged cells", func(t *testing.T) {
-		mtest := minesweeper.Matrix{
+		mtest := minesweeper.Grid{
 			{0, 0, minesweeper.Bomb},
 		}
 
@@ -158,7 +158,7 @@ func TestGame_Unfold(t *testing.T) {
 		// set flag
 		mtest[0][1].Flag(true)
 		assert.True(t, mtest[0][1].Flagged())
-		assertEqualMatrix(t, minesweeper.Matrix{
+		assertEqualMatrix(t, minesweeper.Grid{
 			{0, minesweeper.Flagged, minesweeper.Bomb},
 		}, mtest)
 
@@ -166,13 +166,13 @@ func TestGame_Unfold(t *testing.T) {
 		left, ok := g.Unfold(0, 0)
 		assert.True(t, ok)
 		assert.Equal(t, 1, left)
-		assertEqualMatrix(t, minesweeper.Matrix{
+		assertEqualMatrix(t, minesweeper.Grid{
 			{minesweeper.Unfolded, minesweeper.Flagged, minesweeper.Bomb},
 		}, mtest)
 
 		// cannot set a flag on unfolded cell
 		mtest[0][0].Flag(true)
-		assertEqualMatrix(t, minesweeper.Matrix{
+		assertEqualMatrix(t, minesweeper.Grid{
 			{minesweeper.Unfolded, minesweeper.Flagged, minesweeper.Bomb},
 		}, mtest)
 
@@ -180,14 +180,14 @@ func TestGame_Unfold(t *testing.T) {
 		left, ok = g.Unfold(0, 1)
 		assert.True(t, ok)
 		assert.Equal(t, 1, left)
-		assertEqualMatrix(t, minesweeper.Matrix{
+		assertEqualMatrix(t, minesweeper.Grid{
 			{minesweeper.Unfolded, minesweeper.Flagged, minesweeper.Bomb},
 		}, mtest)
 
 		// unset flag
 		mtest[0][1].Flag(false)
 		assert.False(t, mtest[0][1].Flagged())
-		assertEqualMatrix(t, minesweeper.Matrix{
+		assertEqualMatrix(t, minesweeper.Grid{
 			{minesweeper.Unfolded, 0, minesweeper.Bomb},
 		}, mtest)
 
@@ -196,18 +196,18 @@ func TestGame_Unfold(t *testing.T) {
 		assert.True(t, ok)
 		assert.Equal(t, 0, left)
 		assert.Equal(t, byte(1), mtest[0][1].Bombs())
-		assertEqualMatrix(t, minesweeper.Matrix{
+		assertEqualMatrix(t, minesweeper.Grid{
 			{minesweeper.Unfolded, 1 + minesweeper.Unfolded, minesweeper.Bomb},
 		}, mtest)
 
 	})
 
 	t.Run("double press", func(t *testing.T) {
-		mexp := minesweeper.Matrix{
+		mexp := minesweeper.Grid{
 			{1 + minesweeper.Unfolded, minesweeper.Bomb},
 		}
 
-		mtest := minesweeper.Matrix{
+		mtest := minesweeper.Grid{
 			{0, minesweeper.Bomb},
 		}
 

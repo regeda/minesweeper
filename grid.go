@@ -5,23 +5,23 @@ import (
 	"math/rand"
 )
 
-// Matrix is playground.
-type Matrix [][]Cell
+// Grid is playground.
+type Grid [][]Cell
 
-func newMatrix(rows, cols int) Matrix {
-	m := make(Matrix, rows)
+func newGrid(rows, cols int) Grid {
+	m := make(Grid, rows)
 	for i := range m {
 		m[i] = make([]Cell, cols)
 	}
 	return m
 }
 
-// GenerateMatrix creates a matrix with randomly distributed bombs.
-// rand.Seed should be run manually before GenerateMatrix call.
-func GenerateMatrix(rows, cols int, diffc float64) Matrix {
+// GenerateGrid creates a matrix with randomly distributed bombs.
+// rand.Seed should be run manually before GenerateGrid call.
+func GenerateGrid(rows, cols int, diffc float64) Grid {
 	cells := rows * cols
 	bombs := int(math.Ceil(float64(cells) * diffc))
-	m := newMatrix(rows, cols)
+	m := newGrid(rows, cols)
 	var offset int
 	for bombs > 0 {
 		offset += rand.Intn(rand.Intn(cells-offset-bombs) + 1)
@@ -35,7 +35,7 @@ func GenerateMatrix(rows, cols int, diffc float64) Matrix {
 }
 
 // Stat returns info about cells.
-func (m Matrix) Stat() CellsStat {
+func (m Grid) Stat() CellsStat {
 	var s CellsStat
 	for _, r := range m {
 		for _, c := range r {

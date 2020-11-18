@@ -17,29 +17,29 @@ func main() {
 		return
 	}
 	rand.Seed(time.Now().UnixNano())
-	m := minesweeper.GenerateMatrix(rows, cols, 0.3)
+	m := minesweeper.GenerateGrid(rows, cols, 0.3)
 	g := minesweeper.New(m)
-	printMatrix(m)
+	printGrid(m)
 	var (
 		cmd  string
 		i, j int
 	)
 	for {
-		fmt.Print("Go [x y [F-flag|f-unflag|U-unfold]]: ")
+		fmt.Print("Go [x y [f-flag|v-unflag|u-unfold]]: ")
 		if _, err := fmt.Fscan(os.Stdin, &i, &j, &cmd); err != nil {
 			fmt.Println("failed to read an action:", err)
 			continue
 		}
 		switch cmd {
-		case "F":
-			m[i][j].Flag(true)
-			printMatrix(m)
 		case "f":
+			m[i][j].Flag(true)
+			printGrid(m)
+		case "v":
 			m[i][j].Flag(false)
-			printMatrix(m)
-		case "U":
+			printGrid(m)
+		case "u":
 			left, ok := g.Unfold(i, j)
-			printMatrix(m)
+			printGrid(m)
 			if !ok {
 				fmt.Println("GAME OVER")
 				return
@@ -55,7 +55,7 @@ func main() {
 	}
 }
 
-func printMatrix(m minesweeper.Matrix) {
+func printGrid(m minesweeper.Grid) {
 	for _, r := range m {
 		for _, c := range r {
 			if c.Unfolded() {

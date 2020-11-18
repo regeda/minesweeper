@@ -2,7 +2,7 @@ package minesweeper
 
 // Game implements game play.
 type Game struct {
-	m         Matrix
+	m         Grid
 	cellsStat CellsStat
 
 	xwalk   xset
@@ -11,7 +11,7 @@ type Game struct {
 }
 
 // New creates a new Game.
-func New(m Matrix) *Game {
+func New(m Grid) *Game {
 	return &Game{
 		m:         m,
 		cellsStat: m.Stat(),
@@ -44,11 +44,11 @@ var xnil = xcell{-1, -1}
 
 type xset map[xcell]struct{}
 
-func (h xset) push(x xcell) {
+func (h xset) add(x xcell) {
 	h[x] = struct{}{}
 }
 
-func (h xset) pop() xcell {
+func (h xset) drop() xcell {
 	for x := range h {
 		delete(h, x)
 		return x
@@ -58,7 +58,7 @@ func (h xset) pop() xcell {
 
 func (g *Game) unfold(i, j int) {
 	x := xcell{i, j}
-	for ; x != xnil; x = g.xwalk.pop() {
+	for ; x != xnil; x = g.xwalk.drop() {
 		c := &g.m[x.i][x.j]
 		if c.any(Unfolded | Flagged) {
 			continue
@@ -69,7 +69,7 @@ func (g *Game) unfold(i, j int) {
 		if bombs == 0 {
 			// need to unfold cells around
 			for _, x := range g.xbuf {
-				g.xwalk.push(x)
+				g.xwalk.add(x)
 			}
 		} else {
 			c.suggest(bombs)

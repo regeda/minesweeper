@@ -9,7 +9,7 @@ cols := 5
 rows := 5
 difficulty := 0.3 // how much mines should be generated ceil(cols*rows*difficulty)
 
-m := minesweeper.GenerateMatrix(rows, cols, difficulty)
+m := minesweeper.GenerateGrid(rows, cols, difficulty)
 g := minesweeper.New(m)
 
 for {
