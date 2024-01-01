@@ -1,6 +1,4 @@
 # Minesweeper
-[![Build Status](https://travis-ci.org/regeda/minesweeper.svg?branch=master)](https://travis-ci.org/regeda/minesweeper)
-[![codecov](https://codecov.io/gh/regeda/minesweeper/branch/master/graph/badge.svg)](https://codecov.io/gh/regeda/minesweeper)
 
 Golang implementation of Minesweeper game API.
 
